@@ -1,4 +1,9 @@
-﻿<Page
+﻿<!--
+    TODO: Redesign this gross layout
+    TODO: Scalable too :)
+    -->
+
+<Page
     x:Class="UWP_Hue.oobeSetup"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -12,7 +17,7 @@
         </Flyout>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Height="720" >
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="125"/>
@@ -25,6 +30,8 @@
             <Button x:Name="PressedButton" Content="Pressed!" FontSize="20" Canvas.Left="174" Width="295" Canvas.Top="270" Click="PressedButton_Click"/>
             <ProgressRing x:Name="SplashProgressRing" IsActive="True" Height="40" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="40" Canvas.Left="621" Canvas.Top="642"/>
             <Image x:Name="extendedSplashImage" Source="Assets/bridge_v2-white.png" Height="595" Canvas.Left="638" Width="640"/>
+            <Button x:Name="DeleteButton" Content="Delete API config..." Canvas.Left="324" Canvas.Top="343" Click="DeleteButton_Click"/>
+            <!--Phillips SDK imagray, inverted to be white-->
         </Canvas>
 
         <ContentDialog x:Name="ErrorPopup"

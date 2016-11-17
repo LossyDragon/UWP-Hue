@@ -115,7 +115,6 @@
   <ItemGroup>
     <Content Include="Assets\bridge_v2-white.png" />
     <Content Include="Assets\bridge_v2.svg" />
-    <Content Include="Images\oobe\TempBackGround.jpeg" />
     <Content Include="Licensing\Credits.txt" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
@@ -145,7 +144,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Libs\" />
+    <Folder Include="Images\oobe\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HueLibrary\HueLibrary.csproj">

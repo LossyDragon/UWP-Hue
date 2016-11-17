@@ -23,36 +23,32 @@ using Windows.UI.Core;
 
 //Some code sampled from "HueLightController" on the MicrosoftUWP developer portal.
 
-//TODO: 1. Setup shit for hue
-//TODO: Find bridge
-//TODO: add failsafes per phillips SDK
+
 //TODO: proceed to 'main' app after connection. 
 
 namespace UWP_Hue
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     internal partial class oobeSetup
     {
-        //Init
+        //Init variables
         protected Frame rootFrame = new Frame();
         private Bridge _bridge;
         private IEnumerable<Light> _lights;
 
+        //Initialize xaml componentry.
         public oobeSetup()
         {
             this.InitializeComponent();
-
         }
 
+        //When the proceed button is pressed, proceed with functions.
         private async void PressedButton_Click(object sender, RoutedEventArgs e)
         {
-            await FindBridgeAsync();
-            await FindLightsAsync();
-            SaveBridge();
+            await FindBridgeAsync();    //Find Phillips Hue Bridge.
+            await FindLightsAsync();    //Find Lights after Bridge.
+            SaveBridge();               //Save config files.
 
-            //On Success, go to main UWP page.
+            //On Success, go to main.xaml.
             await rootFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 rootFrame.Navigate(typeof(Main),
@@ -60,12 +56,6 @@ namespace UWP_Hue
                 Window.Current.Content = rootFrame;
             });
         }
-
-        /// <summary>
-        /// Constructor for the initializer. This displays an extended splash screen and progress
-        /// ring while the app loads the bridge, lights, and Cortana. 
-        /// </summary>
-
 
         /// <summary>
         /// Tries to find the bridge using multiple methods.
@@ -116,6 +106,7 @@ namespace UWP_Hue
                     return;
                 }
             }
+
             //Uh-Oh...
             catch (Exception e)
             {
@@ -219,6 +210,16 @@ namespace UWP_Hue
         {
             public Bridge Bridge { get; set; }
             public IEnumerable<Light> Lights { get; set; }
+        }
+
+        //Temporary Button
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var localStorage = ApplicationData.Current.LocalSettings.Values;
+
+            localStorage.Remove("bridgeIp");
+            localStorage.Remove("userId");
+
         }
     }
 }
