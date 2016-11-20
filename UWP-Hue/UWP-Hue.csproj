@@ -101,8 +101,8 @@
     <Compile Include="oobe.xaml.cs">
       <DependentUpon>oobe.xaml</DependentUpon>
     </Compile>
-    <Compile Include="oobeSetup.xaml.cs">
-      <DependentUpon>oobeSetup.xaml</DependentUpon>
+    <Compile Include="Setup.xaml.cs">
+      <DependentUpon>Setup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
@@ -139,7 +139,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="oobeSetup.xaml">
+    <Page Include="Setup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

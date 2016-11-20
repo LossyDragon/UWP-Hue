@@ -8,6 +8,8 @@ using Windows.ApplicationModel.Background;
 using Windows.Storage;
 using HueLibrary;
 using System;
+using System.Diagnostics;
+using System.Threading;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -51,7 +53,7 @@ namespace UWP_Hue
         /// </summary>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            oobeSetup.HuePayload args = e.Parameter as oobeSetup.HuePayload;
+            Setup.HuePayload args = e.Parameter as Setup.HuePayload;
             if (null != args)
             {
                 _bridge = args.Bridge;
@@ -88,6 +90,42 @@ namespace UWP_Hue
                 var localStorage = ApplicationData.Current.LocalSettings.Values;
                 localStorage.Remove("bridgeIp");
                 localStorage.Remove("userId");
+            }
+        }
+
+        ///
+        /// Below are CommandBar functions. 
+        /// 
+
+        //Turn all lights ON or OFF, depending on state.
+        private async void Lights_OnOff(object sender, RoutedEventArgs e)
+        {
+            foreach (var x in Lights)
+            {
+                try
+                {
+                    x.State.On = !x.State.On;   //Bool Switch.
+
+                    await x.ChangeStateAsync();
+                    Debug.WriteLine("Light " + x.Id + " state is now: " + x.State.On);
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+            }
+        }
+
+        //Who Knows...
+        private void GetLights(object sender, RoutedEventArgs e)
+        {
+            foreach (var x in Lights)
+            {
+                Debug.WriteLine("Light ID: " + x.Id);           //Shows the ID of a bulb from bridge.
+                Debug.WriteLine("Model Num: " + x.ModelId);     //Shows the Model Number of a bulb.
+                Debug.WriteLine("State: " + x.State.On);        //Shows the On/Off state of a bulb.
+                Debug.WriteLine("----------");
+
             }
         }
     }

@@ -1,25 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-    //TODO: This can be better. But it works for now
+//TODO: This can be better. But it works for now
 
 namespace UWP_Hue
 {
@@ -68,14 +55,14 @@ namespace UWP_Hue
             {
                 Debug.WriteLine("---YES----");
 
-                oobeSetup setup = new oobeSetup(); //Setup Temporaty class to find HUE bridge/lights...
+                Setup setup = new Setup(); //Setup Temporaty class to find HUE bridge/lights...
                 setup.PressedButton_Click(null,null);
 
                 this.Frame.Navigate(typeof(Main));
             }
             else
             {
-                this.Frame.Navigate(typeof(oobeSetup));
+                this.Frame.Navigate(typeof(Setup));
             }
         }
 

@@ -15,8 +15,6 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-
         <Pivot x:Name="Pivot1" ItemsSource="{x:Bind Lights, Mode=OneWay}">
 
             <!--TODO: Replace ItemsControl with GridView -->
@@ -44,8 +42,13 @@
     
     <Page.BottomAppBar>
         <CommandBar>
+            <AppBarButton x:Name="GetLightInfo" Click="GetLights" Icon="Help" Label="Get Light Information"/>
+            <AppBarSeparator/>
+            <AppBarButton x:Name="AllOff" Click="Lights_OnOff" Icon="Go" Label="Turn lights on or off." />
+            <AppBarSeparator/>
             <AppBarButton x:Name="Delete" Click="BridgeDelete" Icon="Delete" Label="Delete Config"/>
-            <AppBarButton x:Name="LightRefreshButton" Click="LightRefresh_Click" Icon="Refresh" Label="Reload lights" ToolTipService.ToolTip="Reload lights"/>
+            <AppBarButton x:Name="LightRefreshButton" Click="LightRefresh_Click" Icon="Refresh" Label="Reload lights"/>
+            <AppBarSeparator/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

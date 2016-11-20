@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using HueLibrary;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
@@ -27,7 +18,7 @@ using Windows.UI.Core;
 
 namespace UWP_Hue
 {
-    internal partial class oobeSetup
+    internal partial class Setup
     {
         //Init variables
         protected Frame rootFrame = new Frame();
@@ -35,7 +26,7 @@ namespace UWP_Hue
         private IEnumerable<Light> _lights;
 
         //Initialize xaml componentry.
-        public oobeSetup()
+        public Setup()
         {
             this.InitializeComponent();
         }
