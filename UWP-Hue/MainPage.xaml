@@ -29,10 +29,13 @@
                     <RelativePanel>
                         <TextBlock x:Name="PowerLabel" Margin="0,20,0,0">Power</TextBlock>
                         <ToggleSwitch x:Name="Power" RelativePanel.Below="PowerLabel" IsOn="{x:Bind State.On, Mode=TwoWay}" />
+                        
                         <TextBlock x:Name="HueLabel" RelativePanel.Below="Power">Hue</TextBlock>
                         <Slider x:Name="Hue" RelativePanel.Below="HueLabel" Value="{x:Bind State.Hue, Mode=TwoWay, Converter={StaticResource UShortToDoubleConverter}}" Maximum="65535" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True" />
+                        
                         <TextBlock x:Name="SatLabel" RelativePanel.Below="Hue">Saturation</TextBlock>
                         <Slider x:Name="Sat" RelativePanel.Below="SatLabel" Value="{x:Bind State.Saturation, Mode=TwoWay, Converter={StaticResource ByteToDoubleConverter}}"  Maximum="254" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" />
+                        
                         <TextBlock x:Name="BriLabel" RelativePanel.Below="Sat">Brightness</TextBlock>
                         <Slider x:Name="Bri" RelativePanel.Below="BriLabel" Value="{x:Bind State.Brightness, Mode=TwoWay, Converter={StaticResource ByteToDoubleConverter}}"  Maximum="254" Minimum="1" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True" />
                     </RelativePanel>
@@ -44,9 +47,17 @@
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton x:Name="GetLightInfo" Click="GetLights" Icon="Help" Label="Get Light Information" Visibility="Collapsed"/>
+            <AppBarSeparator Name="Seperator1" Visibility="Collapsed"/>
+
+            <AppBarButton x:Name="Really_Dim_Bri" Click="Lights_Brightness10" Icon="OneBar" Label="10% Brightness."  />
+            <AppBarButton x:Name="Dim_Bri" Click="Lights_Brightness30" Icon="TwoBars" Label="30% Brightness."  />
+            <AppBarButton x:Name="Half_Bri" Click="Lights_Brightness50" Icon="ThreeBars" Label="50% Brightness." />
+            <AppBarButton x:Name="Full_Bri" Click="Lights_Brightness100" Icon="FourBars" Label="100% Brightness."/>
             <AppBarSeparator/>
-            <AppBarButton x:Name="AllOff" Click="Lights_OnOff" Icon="Go" Label="Turn lights on or off." />
+            
+            <AppBarButton x:Name="AllOff" Click="Lights_OnOff" Icon="FullScreen" Label="Turn lights ON/OFF." />
             <AppBarSeparator/>
+            
             <AppBarButton x:Name="Delete" Click="BridgeDelete" Icon="Delete" Label="Delete Config"/>
             <AppBarButton x:Name="LightRefreshButton" Click="LightRefresh_Click" Icon="Refresh" Label="Reload lights"/>
             <AppBarSeparator/>

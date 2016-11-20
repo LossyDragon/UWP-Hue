@@ -10,6 +10,8 @@ using System.Diagnostics;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
+//TODO: Refresh <RelativePanel> on changes with <CommandBar>
+
 namespace UWP_Hue
 {
     internal sealed partial class MainPage : Page, INotifyPropertyChanged
@@ -38,8 +40,9 @@ namespace UWP_Hue
         {
             this.InitializeComponent();
 
-#if (DEBUG)
+#if DEBUG
             GetLightInfo.Visibility = Visibility.Visible;
+            Seperator1.Visibility = Visibility.Visible;
 #endif
 
         }
@@ -120,6 +123,44 @@ namespace UWP_Hue
                 Debug.WriteLine("State: " + x.State.On);        //Shows the On/Off state of a bulb.
                 Debug.WriteLine("----------");
 
+            }
+        }
+
+
+        //TODO: Is there a way to combine these to one function?
+        private void Lights_Brightness10(object sender, RoutedEventArgs e)
+        {
+            foreach (var x in Lights)
+            {
+                x.State.Brightness = 25;
+                Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
+            }
+        }
+
+        private void Lights_Brightness30(object sender, RoutedEventArgs e)
+        {
+            foreach (var x in Lights)
+            {
+                x.State.Brightness = 76;
+                Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
+            }
+        }
+
+        private void Lights_Brightness50(object sender, RoutedEventArgs e)
+        {
+            foreach (var x in Lights)
+            {
+                x.State.Brightness = 127;
+                Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
+            }
+        }
+
+        private void Lights_Brightness100(object sender, RoutedEventArgs e)
+        {
+            foreach (var x in Lights)
+            {
+                x.State.Brightness = 254;
+                Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
             }
         }
     }

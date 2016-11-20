@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
-using Windows.Graphics.Display;
 using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -78,7 +77,7 @@ namespace UWP_Hue
         private void SetupButton_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Setup Clicked");
-            this.Frame.Navigate(typeof(Setup));
+            rootFrame.Navigate(typeof(Setup));
         }
 
     }

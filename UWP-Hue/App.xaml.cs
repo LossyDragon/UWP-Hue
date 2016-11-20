@@ -33,7 +33,8 @@ namespace UWP_Hue
             {
                 bool loadState = (e.PreviousExecutionState == ApplicationExecutionState.Terminated);
                 oobe extendedSplash = new oobe(e.SplashScreen, loadState);
-                Window.Current.Content = extendedSplash;
+                Setup setupWindow = new Setup(); // ¯\_(ツ)_/¯  ¯\_(ツ)_/¯  ¯\_(ツ)_/¯ 
+                Window.Current.Content = extendedSplash; //TODO: Replace setupWindow to setup Bridge
             }
 
             Window.Current.Activate();
