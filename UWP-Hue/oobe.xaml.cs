@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-//TODO: Background image?
+    //TODO: This can be better. But it works for now
 
 namespace UWP_Hue
 {
@@ -29,38 +29,54 @@ namespace UWP_Hue
     public sealed partial class oobe : Page
     {
 
-        public bool Bypass { get; private set; }
-
         public oobe()
         {
-            this.InitializeComponent();
             //Function is called to see if HUE has been set-up or not.
             CheckSetup();
+            this.InitializeComponent();
         }
 
-        private async Task CheckSetup()
+        /// <summary>
+        /// When the application launches, check to see if setup has been done, if so, go to main.
+        /// </summary>
+        private void CheckSetup()
         {
             try
             {
-                //Does not work for saved files.
-                var folders = await ApplicationData.Current.LocalFolder.GetFoldersAsync();
-
-                if (folders.Count > 0)
+                var localStorage = ApplicationData.Current.LocalSettings.Values;
+                Debug.WriteLine(localStorage);
+                if (localStorage.ContainsKey("bridgeIp") && localStorage.ContainsKey("userId"))
                 {
+                    Debug.WriteLine("---YES----");
                     this.Frame.Navigate(typeof(Main));
                 }
-                
+                Debug.WriteLine("---NO---");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
         }
 
         //User Select oobe setup.
-        private void SetMeUp(object sender, RoutedEventArgs e)
+        private async void SetMeUp(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(oobeSetup));
+
+            var localStorage = ApplicationData.Current.LocalSettings.Values;
+            Debug.WriteLine(localStorage);
+            if (localStorage.ContainsKey("bridgeIp") && localStorage.ContainsKey("userId"))
+            {
+                Debug.WriteLine("---YES----");
+
+                oobeSetup setup = new oobeSetup(); //Setup Temporaty class to find HUE bridge/lights...
+                setup.PressedButton_Click(null,null);
+
+                this.Frame.Navigate(typeof(Main));
+            }
+            else
+            {
+                this.Frame.Navigate(typeof(oobeSetup));
+            }
         }
 
     }

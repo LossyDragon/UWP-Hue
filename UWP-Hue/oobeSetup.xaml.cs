@@ -19,12 +19,11 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Windows.UI.Core;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+/// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+///Some code sampled from "HueLightController" on the MicrosoftUWP developer portal.
 
-//Some code sampled from "HueLightController" on the MicrosoftUWP developer portal.
 
-
-//TODO: proceed to 'main' app after connection. 
+//TODO: Try and merge "oobe" with this class.
 
 namespace UWP_Hue
 {
@@ -42,7 +41,7 @@ namespace UWP_Hue
         }
 
         //When the proceed button is pressed, proceed with functions.
-        private async void PressedButton_Click(object sender, RoutedEventArgs e)
+        public async void PressedButton_Click(object sender, RoutedEventArgs e)
         {
             await FindBridgeAsync();    //Find Phillips Hue Bridge.
             await FindLightsAsync();    //Find Lights after Bridge.
@@ -192,8 +191,6 @@ namespace UWP_Hue
                     "We encountered an unexpected problem trying to find your lights: " + e);
             }
         }
-
-
         //Report an error Function...
         private async Task ReportErrorAsync(string message)
         {

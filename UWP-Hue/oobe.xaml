@@ -12,11 +12,6 @@
     mc:Ignorable="d">
 
     <Grid>
-        <!--TODO: Background?-->
-        <!--<Grid.Background>
-            <ImageBrush ImageSource=""/>
-        </Grid.Background>-->
-
         <StackPanel  HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Welcome to UWP Hue." TextAlignment="Center" Style="{ThemeResource HeaderTextBlockStyle}"/>
             <StackPanel Orientation="Vertical" >
