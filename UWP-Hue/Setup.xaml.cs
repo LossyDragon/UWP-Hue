@@ -9,6 +9,7 @@ using HueLibrary;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Windows.UI.Core;
+using Windows.Foundation;
 
 /// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 ///Some code sampled from "HueLightController" on the MicrosoftUWP developer portal.
@@ -41,7 +42,7 @@ namespace UWP_Hue
             //On Success, go to main.xaml.
             await rootFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                rootFrame.Navigate(typeof(Main),
+                rootFrame.Navigate(typeof(MainPage),
                     new HuePayload { Bridge = _bridge, Lights = _lights });
                 Window.Current.Content = rootFrame;
             });
