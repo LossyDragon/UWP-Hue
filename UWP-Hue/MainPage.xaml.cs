@@ -147,6 +147,7 @@ namespace UWP_Hue
                 x.State.Brightness = 25;
                 Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
             }
+            LightRefresh();
         }
 
         private void Lights_Brightness30(object sender, RoutedEventArgs e)
@@ -156,6 +157,7 @@ namespace UWP_Hue
                 x.State.Brightness = 76;
                 Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
             }
+            LightRefresh();
         }
 
         private void Lights_Brightness50(object sender, RoutedEventArgs e)
@@ -165,6 +167,7 @@ namespace UWP_Hue
                 x.State.Brightness = 127;
                 Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
             }
+            LightRefresh();
         }
 
         private void Lights_Brightness100(object sender, RoutedEventArgs e)
@@ -174,38 +177,30 @@ namespace UWP_Hue
                 x.State.Brightness = 254;
                 Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
             }
+            LightRefresh();
         }
 
-        //private void HueHex_SelectionChanged(object sender, RoutedEventArgs e)
-        //{
-        //    TextBox stringValue = sender as TextBox;
-        //
-        //    string tempVal = Convert.ToString(stringValue);
-        //
-        //    tempVal = Convert.ToString(Int16.MinValue, 16);
-        //
-        //    try
-        //    {
-        //        UInt16 value = Convert.ToUInt16(tempVal, 16);
-        //
-        //        
-        //
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //Constructor for Content Dialog
-        //        ContentDialog deleteFileDialog = new ContentDialog()
-        //        {
-        //            Title = "Error!",
-        //            Content = "Unable to convert that number! \r\n" + ex,
-        //            PrimaryButtonText = "Sorry!",
-        //        };
-        //
-        //        //Clear bad value.
-        //        stringValue.Text = String.Empty;
-        //    }
-        //
-        //}
+        //I like deep purple with Gen 3 bulbs.
+        private void I_Love_Purple(object sender, RoutedEventArgs e)
+        {
+            foreach (var PURPLE in Lights)
+            {
+                PURPLE.State.Hue = 50000;
+                PURPLE.State.Saturation = 254;
+            }
+            LightRefresh();
+        }
+
+        /// <summary>
+        /// Same as LightRefresh_Click but with no args.
+        /// Refreshes the UI to match the actual state of the lights.
+        /// </summary>
+        private async void LightRefresh()
+        {
+            Lights = new ObservableCollection<Light>(await _bridge.GetLightsAsync());
+        }
+
+
     }
 
 }

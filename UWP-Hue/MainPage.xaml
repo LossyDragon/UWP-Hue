@@ -49,6 +49,9 @@
             <AppBarButton x:Name="GetLightInfo" Click="GetLights" Icon="Help" Label="Get Light Information" Visibility="Collapsed"/>
             <AppBarSeparator Name="Seperator1" Visibility="Collapsed"/>
 
+            <AppBarButton x:Name="PURPLE" Click="I_Love_Purple" Icon="Emoji2" Label="&#60;3 Purple!"/>
+            <AppBarSeparator/>
+
             <AppBarButton x:Name="DimDim_Bri"   Click="Lights_Brightness10" Icon="OneBar" Label="10% Brightness."  />
             <AppBarButton x:Name="Dim_Bri"      Click="Lights_Brightness30" Icon="TwoBars" Label="30% Brightness."  />
             <AppBarButton x:Name="Half_Bri"     Click="Lights_Brightness50"  Icon="ThreeBars" Label="50% Brightness." />
