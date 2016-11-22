@@ -29,7 +29,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Data;
 
 namespace HueLibrary
 {

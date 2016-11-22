@@ -7,10 +7,13 @@ using Windows.Storage;
 using HueLibrary;
 using System;
 using System.Diagnostics;
+using Windows.UI.Xaml.Controls.Primitives;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 //TODO: Refresh <RelativePanel> on changes with <CommandBar>
+//TODO: 16bit hex to dec for hue.
+
 
 namespace UWP_Hue
 {
@@ -59,7 +62,6 @@ namespace UWP_Hue
                 _bridge = args.Bridge;
                 Lights = new ObservableCollection<Light>(args.Lights);
             }
-
         }
 
         /// <summary>
@@ -79,7 +81,7 @@ namespace UWP_Hue
             ContentDialog deleteFileDialog = new ContentDialog()
             {
                 Title = "Confirm...",
-                Content = "Are you sure you want to delete your API configuration?\r\nNext time you launch, you will need to pair the unit again.",
+                Content = "Are you sure you want to delete your API configuration?\r\nNext time you launch, you will need to pair the unit again.\r\nThe Application will exit if deleted.",
                 PrimaryButtonText = "I am Sure",
                 SecondaryButtonText = "Cancel"
             };
@@ -94,38 +96,48 @@ namespace UWP_Hue
                 localStorage.Remove("bridgeIp");
                 localStorage.Remove("userId");
             }
+
+            Application.Current.Exit();
         }
 
         //Below are CommandBar Button actions.
-
         /// <summary>
         /// Turns all lights configured to bridge ON or OFF, depending on state.
         /// </summary>
-        private async void Lights_OnOff(object sender, RoutedEventArgs e)
+        private async void LightsOnOff_Click(object sender, RoutedEventArgs e)
         {
+            ToggleButton toggle = sender as ToggleButton;
+            lightsonoff.IsCompact = (bool)toggle.IsChecked;
+
             foreach (var x in Lights)
             {
                 x.State.On = !x.State.On;   //Bool Switch.
                 await x.ChangeStateAsync();
                 Debug.WriteLine("Light " + x.Id + " state is now: " + x.State.On);
+
             }
         }
 
-        /// <summary>
+        /// <summary> (DEBUG)
         /// Used to display some information within the HueLibrary (Bridge and Light info).
         /// </summary>
         private void GetLights(object sender, RoutedEventArgs e)
         {
             foreach (var x in Lights)
             {
-                Debug.WriteLine("Light ID: " + x.Id);           //Shows the ID of a bulb from bridge.
-                Debug.WriteLine("Model Num: " + x.ModelId);     //Shows the Model Number of a bulb.
-                Debug.WriteLine("State: " + x.State.On);        //Shows the On/Off state of a bulb.
+                Debug.WriteLine("Light ID: " + x.Id);               //Shows the ID of a bulb from bridge.
+                Debug.WriteLine("Model Num: " + x.ModelId);         //Shows the Model Number of a bulb.
+                Debug.WriteLine("State on/off: " + x.State.On);     //Shows the On/Off state of a bulb.
+                Debug.WriteLine("Bulb " + x.Id + " name is: " +x.Name);     //Shows the bulb's name.
+                Debug.WriteLine("Bulb Type: " + x.Type);            //Shows the type of bulb it is.
+                Debug.WriteLine("Effect: " + x.State.Effect);       //Effect state.
+                Debug.WriteLine("Bri: " + x.State.Brightness);      //Briness output.
+                Debug.WriteLine("Hue: " + x.State.Hue);             //Hue output.
+                Debug.WriteLine("Sat: " + x.State.Saturation);      //Saturation outout.
                 Debug.WriteLine("----------");
 
             }
         }
-
 
         //TODO: Is there a way to combine these to one function?
         private void Lights_Brightness10(object sender, RoutedEventArgs e)
@@ -163,5 +175,37 @@ namespace UWP_Hue
                 Debug.WriteLine("Light " + x.Id + " is now: " + x.State.Brightness + " bright.");
             }
         }
+
+        //private void HueHex_SelectionChanged(object sender, RoutedEventArgs e)
+        //{
+        //    TextBox stringValue = sender as TextBox;
+        //
+        //    string tempVal = Convert.ToString(stringValue);
+        //
+        //    tempVal = Convert.ToString(Int16.MinValue, 16);
+        //
+        //    try
+        //    {
+        //        UInt16 value = Convert.ToUInt16(tempVal, 16);
+        //
+        //        
+        //
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Constructor for Content Dialog
+        //        ContentDialog deleteFileDialog = new ContentDialog()
+        //        {
+        //            Title = "Error!",
+        //            Content = "Unable to convert that number! \r\n" + ex,
+        //            PrimaryButtonText = "Sorry!",
+        //        };
+        //
+        //        //Clear bad value.
+        //        stringValue.Text = String.Empty;
+        //    }
+        //
+        //}
     }
+
 }

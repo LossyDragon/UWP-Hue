@@ -30,5 +30,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 TODO: 
 
 (?)		Phillips: http://www.developers.meethue.com/
+(MIT)	Yortw: https://github.com/Yortw/RSSDP
 (MIT)	Microsoft: https://github.com/Microsoft/Windows-appsample-huelightcontroller
-(MIT)		Microsoft: https://github.com/Microsoft/Windows-universal-samples
+(MIT)	Microsoft: https://github.com/Microsoft/Windows-universal-samples

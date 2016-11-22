@@ -26,8 +26,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Web.Http;
+using Rssdp;
 
 namespace HueLibrary
 {
@@ -57,11 +60,53 @@ namespace HueLibrary
             UserId = userId;
         }
 
+
         /// <summary>
-        /// Attempts to find a bridge on your network and create an object for it. Returns null if no bridge is found. 
+        /// Attempts to find a bridge using UPnP, per Discovery Guidelines at
+        /// http://www.developers.meethue.com/documentation/hue-bridge-discovery
+        /// </summary>
+        public static async Task<Bridge> FindUPnP()
+        {
+
+            try
+            {
+                string ip = "";
+
+                using (var deviceLocator = new SsdpDeviceLocator())
+                {
+                    var foundDevices = await deviceLocator.SearchAsync();
+
+                    foreach (var foundDevice in foundDevices)
+                    {
+
+                        var url = foundDevice.DescriptionLocation.ToString();
+
+                        if (url.Contains("/description.xml"))
+                        {
+                            url = url.Replace("http://", "");
+                            url = url.Substring(0, url.IndexOf("/"));
+                            Debug.WriteLine(url);
+                            ip = url;
+                        }
+                    }
+                }
+
+                return new Bridge(ip);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Second attempt to find a bridge using N-UPnP, per Discovery Guidelines at
+        /// http://www.developers.meethue.com/documentation/hue-bridge-discovery
         /// </summary>
         public static async Task<Bridge> FindAsync()
         {
+            Debug.WriteLine("Trying N-UPnP");
+
             using (var client = new HttpClient())
             {
                 try

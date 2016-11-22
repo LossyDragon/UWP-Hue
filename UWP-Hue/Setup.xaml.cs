@@ -26,20 +26,23 @@ namespace UWP_Hue
         private Bridge _bridge;
         private IEnumerable<Light> _lights;
 
-        //Initialize xaml componentry.
         public Setup()
         {
             this.InitializeComponent();
         }
 
         //When the proceed button is pressed, proceed with functions.
-        public async void PressedButton_Click(object sender, RoutedEventArgs e)
+        private void PressedButton_Click(object sender, RoutedEventArgs e)
+        {
+            Payload();
+        }
+
+        public async void Payload()
         {
             await FindBridgeAsync();    //Find Phillips Hue Bridge.
             await FindLightsAsync();    //Find Lights after Bridge.
             SaveBridge();               //Save config files.
 
-            //On Success, go to main.xaml.
             await rootFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 rootFrame.Navigate(typeof(MainPage),
@@ -58,12 +61,12 @@ namespace UWP_Hue
             {
                 // First attempt: local storage cache.
                 var localStorage = ApplicationData.Current.LocalSettings.Values;
-                Debug.WriteLine(localStorage);
                 if (localStorage.ContainsKey("bridgeIp") && localStorage.ContainsKey("userId"))
                 {
                     _bridge = new Bridge(
                         localStorage["bridgeIp"].ToString(),
                         localStorage["userId"].ToString());
+
                     if (await PrepareBridgeAsync())
                     {
                         return;
@@ -71,7 +74,8 @@ namespace UWP_Hue
                 }
 
                 // Second attempt: Hue N-UPnP service.
-                _bridge = await Bridge.FindAsync();
+                _bridge = await Bridge.FindUPnP();
+
                 if (await PrepareBridgeAsync())
                 {
                     return;
@@ -79,8 +83,9 @@ namespace UWP_Hue
 
                 // Third attempt: Re-try Hue N-UPnP service.
                 await DispatchAwaitableUITask(async () =>
-                    await RetryBridgeSearchPopup.ShowAsync());
+                    await RetryBridgeSearchPopup());
                 _bridge = await Bridge.FindAsync();
+
                 if (await PrepareBridgeAsync())
                 {
                     return;
@@ -92,6 +97,7 @@ namespace UWP_Hue
                     await BridgeEntryPopup.ShowAsync();
                     _bridge = new Bridge(BridgEntryIp.Text);
                 });
+
                 if (await PrepareBridgeAsync())
                 {
                     return;
@@ -101,12 +107,14 @@ namespace UWP_Hue
             //Uh-Oh...
             catch (Exception e)
             {
-                await ReportErrorAsync(
-                    "We encountered an unexpected problem trying to find your bridge: " + e);
+                await ReportErrorPopup(
+                    "We encountered an unexpected problem trying to find your bridge: " + e + "/r/nThe Application will now exit...", true);
             }
-            await ReportErrorAsync("We couldn't find your bridge. Make sure it's powered on, " +
+
+            await ReportErrorPopup("We couldn't find your bridge. Make sure it's powered on, " +
                 "has 3 blue lights illuminated, on the same network as this device, " +
-                "and that you're connected to the Internet.");
+                "and that you're connected to the Internet.", false);
+
             this.Frame.Navigate(typeof(oobe));
         }
 
@@ -118,6 +126,10 @@ namespace UWP_Hue
             var localStorage = ApplicationData.Current.LocalSettings.Values;
             localStorage["bridgeIp"] = _bridge.Ip;
             localStorage["userId"] = _bridge.UserId;
+
+            //Show some bridge information.
+            Debug.WriteLine(_bridge.Ip);
+            Debug.WriteLine(_bridge.UserId);
         }
 
         private Task DispatchAwaitableUITask(Func<Task> task)
@@ -173,42 +185,58 @@ namespace UWP_Hue
                 _lights = new ObservableCollection<Light>(await _bridge.GetLightsAsync());
                 if (!_lights.Any())
                 {
-                    await ReportErrorAsync("We couldn't find any lights. Make sure they're in " +
-                        "range and connected to a power source.");
+                    await ReportErrorPopup("We couldn't find any lights. Make sure they're in " +
+                        "range and connected to a power source.", false);
                 }
             }
             catch (Exception e)
             {
-                await ReportErrorAsync(
-                    "We encountered an unexpected problem trying to find your lights: " + e);
+                await ReportErrorPopup(
+                    "We encountered an unexpected problem trying to find your lights: " + e, true);
             }
         }
-        //Report an error Function...
-        private async Task ReportErrorAsync(string message)
+
+        //TODO
+        private async Task RetryBridgeSearchPopup()
         {
-            await DispatchAwaitableUITask(async () =>
+            ContentDialog retryBridge = new ContentDialog()
             {
-                ErrorPopupText.Text = "Something went wrong.\r\n" +
-                    message + "\r\nThe app will now exit.";
-                var results = await ErrorPopup.ShowAsync();
+                Title = "Find bridge",
+                Content = "TODO",
+                PrimaryButtonText = "Okay"
+            };
+
+            ContentDialogResult result = await retryBridge.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                return;
+            }
+        }
+
+        //Report an error Function...
+        private async Task ReportErrorPopup(string message, bool error)
+        {
+            //Constructor for Content Dialog
+            ContentDialog errorReport = new ContentDialog()
+            {
+                Title = "Something went wrong!",
+                Content = message,
+                PrimaryButtonText = "Okay"
+            };
+
+            ContentDialogResult result = await errorReport.ShowAsync();
+
+            if (result == ContentDialogResult.Primary && error == true)
+            {
                 Application.Current.Exit();
-            });
+            }
         }
 
         internal class HuePayload
         {
             public Bridge Bridge { get; set; }
             public IEnumerable<Light> Lights { get; set; }
-        }
-
-        //Temporary Button
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            var localStorage = ApplicationData.Current.LocalSettings.Values;
-
-            localStorage.Remove("bridgeIp");
-            localStorage.Remove("userId");
-
         }
     }
 }

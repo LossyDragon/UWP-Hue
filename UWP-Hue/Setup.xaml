@@ -24,19 +24,7 @@
             <Button x:Name="PressedButton" Content="Pressed!" FontSize="20" Canvas.Left="174" Width="295" Canvas.Top="270" Click="PressedButton_Click"/>
             <ProgressRing x:Name="SplashProgressRing" IsActive="True" Height="40" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="40" Canvas.Left="621" Canvas.Top="642"/>
             <Image x:Name="extendedSplashImage" Source="Assets/bridge_v2-white.png" Height="595" Canvas.Left="638" Width="640"/>
-            <Button x:Name="DeleteButton" Content="Delete API config..." Canvas.Left="324" Canvas.Top="343" Click="DeleteButton_Click"/>
         </Canvas>
-
-        <ContentDialog x:Name="ErrorPopup"
-                        VerticalAlignment="Stretch"
-                        Title="Uh oh"
-                        PrimaryButtonText="Okay"
-                        IsPrimaryButtonEnabled="{Binding IsChecked, ElementName=checkBoxAgree, Mode=OneWay}" Grid.RowSpan="2">
-            <StackPanel>
-                <TextBlock x:Name="ErrorPopupText" Text=""
-                            TextWrapping="Wrap" />
-            </StackPanel>
-        </ContentDialog>
 
         <ContentDialog x:Name="BridgeEntryPopup"
                         VerticalAlignment="Stretch"
@@ -47,16 +35,6 @@
                 <TextBlock x:Name="BridgEntryText" Text="Sorry, but we couldn't automatically find your bridge. Try manually entering its IP address."
                             TextWrapping="Wrap" />
                 <TextBox x:Name="BridgEntryIp" Header="Bridge IP" Margin="0,10,0,0"></TextBox>
-            </StackPanel>
-        </ContentDialog>
-
-        <ContentDialog x:Name="RetryBridgeSearchPopup"
-                        VerticalAlignment="Stretch"
-                        Title="Find bridge"
-                        PrimaryButtonText="Okay"
-                        IsPrimaryButtonEnabled="{Binding IsChecked, ElementName=checkBoxAgree, Mode=OneWay}">
-            <StackPanel>
-                <TextBlock x:Name="RetryBridgeSearchText" Text="We're having trouble automatically finding your bridge. Make sure it's powered on, has 3 blue lights illuminated, on the same network as this device, and that you're connected to the Internet. Then press 'Okay' and we'll try again." TextWrapping="Wrap" />
             </StackPanel>
         </ContentDialog>
     </Grid>

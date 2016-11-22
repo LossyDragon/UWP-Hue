@@ -115,6 +115,8 @@
   <ItemGroup>
     <Content Include="Assets\BadSplash.png" />
     <Content Include="Assets\bridge_v2-white.png" />
+    <Content Include="Images\Switch Off-250.png" />
+    <Content Include="Images\Switch On Filled-250.png" />
     <Content Include="Licensing\Credits.txt" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

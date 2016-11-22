@@ -23,7 +23,7 @@ namespace UWP_Hue
         internal Frame rootFrame;          //
         private SplashScreen splash;        // Variable to hold the splash screen object.
 
-        public oobe(SplashScreen splashscreen, bool loadState)
+        public oobe(SplashScreen splashscreen)
         {
             this.InitializeComponent();
 
@@ -44,7 +44,8 @@ namespace UWP_Hue
                 Debug.WriteLine("Bridge Already Saved!");
 
                 Setup setup = new Setup(); //Setup Temporaty class to find HUE bridge/lights...
-                setup.PressedButton_Click(null, null);
+                setup.Payload();
+
                 // Navigate to mainpage
                 rootFrame.Navigate(typeof(MainPage));
             }
@@ -73,11 +74,14 @@ namespace UWP_Hue
             }
         }
 
+
         //TODO: I broke this ¯\_(ツ)_/¯ Won't Navigate to....
         private void SetupButton_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Setup Clicked");
-            rootFrame.Navigate(typeof(Setup));
+
+            Setup setupWindow = new Setup(); 
+            Window.Current.Content = setupWindow;
         }
 
     }
