@@ -16,14 +16,20 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot x:Name="Pivot1" ItemsSource="{x:Bind Lights, Mode=OneWay}" Grid.RowSpan="2">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
-            <!--TODO: Replace ItemsControl with GridView -->
-            <Pivot.HeaderTemplate>
-                <DataTemplate x:DataType="hueLibrary:Light">
-                    <TextBlock Text="{x:Bind Name}" FontSize="40" />
-                </DataTemplate>
-            </Pivot.HeaderTemplate>
+        <!--1st Grid Row-->
+        <Pivot Grid.Row="0" x:Name="HeaderPivot" ItemsSource="{x:Bind Lights, Mode=OneWay}">
+
+        <Pivot.HeaderTemplate>
+            <DataTemplate x:DataType="hueLibrary:Light">
+                <TextBlock Text="{x:Bind Name}"  FontSize="40"/>
+            </DataTemplate>
+        </Pivot.HeaderTemplate>            
+
             <Pivot.ItemTemplate>
                 <DataTemplate x:DataType="hueLibrary:Light">
                     <RelativePanel>
@@ -42,13 +48,16 @@
                 </DataTemplate>
             </Pivot.ItemTemplate>
         </Pivot>
+        
+        <!--2nd Grid Row-->
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Preselected colors:"/>
+        </StackPanel>
+
     </Grid>
 
     <Page.BottomAppBar>
         <CommandBar Name="CommandBars">
-            <AppBarButton x:Name="GetLightInfo" Click="GetLights" Icon="Help" Label="Get Light Information" Visibility="Collapsed"/>
-            <AppBarSeparator Name="Seperator1" Visibility="Collapsed"/>
-
             <AppBarButton x:Name="PURPLE" Click="I_Love_Purple" Icon="Emoji2" Label="&#60;3 Purple!"/>
             <AppBarSeparator/>
 
@@ -65,8 +74,9 @@
             </AppBarToggleButton>
             <AppBarSeparator/>
 
-            <AppBarButton x:Name="Delete" Click="BridgeDelete" Icon="Delete" Label="Delete Config"/>
             <AppBarButton x:Name="LightRefreshButton" Click="LightRefresh_Click" Icon="Refresh" Label="Reload lights"/>
+            <AppBarButton x:Name="GetLightInfo" Click="GetLights" Icon="Help" Label="Get Light Information"/>
+            <AppBarButton x:Name="Delete" Click="BridgeDelete" Icon="Delete" Label="Delete Config"/>
             <AppBarSeparator/>
         </CommandBar>
     </Page.BottomAppBar>

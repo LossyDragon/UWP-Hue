@@ -8,18 +8,20 @@ using HueLibrary;
 using System;
 using System.Diagnostics;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.StartScreen;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-//TODO: Refresh <RelativePanel> on changes with <CommandBar>
 //TODO: 16bit hex to dec for hue.
-
+//TODO: Add pre-defined color butttons.
+//TODO: Add some icons next to Light names: http://www.developers.meethue.com/documentation/icon-pack
+//TODO About page for bridge/light info.
 
 namespace UWP_Hue
 {
     internal sealed partial class MainPage : Page, INotifyPropertyChanged
     {
-        
+
         private Bridge _bridge;
         private ObservableCollection<Light> _lights;
         private ObservableCollection<Light> Lights
@@ -42,12 +44,6 @@ namespace UWP_Hue
         public MainPage()
         {
             this.InitializeComponent();
-
-#if DEBUG
-            GetLightInfo.Visibility = Visibility.Visible;
-            Seperator1.Visibility = Visibility.Visible;
-#endif
-
         }
 
         /// <summary>
@@ -85,7 +81,7 @@ namespace UWP_Hue
                 PrimaryButtonText = "I am Sure",
                 SecondaryButtonText = "Cancel"
             };
-            
+
             //Wait for result
             ContentDialogResult result = await deleteFileDialog.ShowAsync();
 
@@ -95,30 +91,28 @@ namespace UWP_Hue
                 var localStorage = ApplicationData.Current.LocalSettings.Values;
                 localStorage.Remove("bridgeIp");
                 localStorage.Remove("userId");
+                Application.Current.Exit();
             }
-
-            Application.Current.Exit();
         }
 
-        //Below are CommandBar Button actions.
         /// <summary>
         /// Turns all lights configured to bridge ON or OFF, depending on state.
         /// </summary>
-        private async void LightsOnOff_Click(object sender, RoutedEventArgs e)
+        public async void LightsOnOff_Click(object sender, RoutedEventArgs e)
         {
             ToggleButton toggle = sender as ToggleButton;
             lightsonoff.IsCompact = (bool)toggle.IsChecked;
 
             foreach (var x in Lights)
             {
-                x.State.On = !x.State.On;   //Bool Switch.
+                x.State.On = !x.State.On;
                 await x.ChangeStateAsync();
                 Debug.WriteLine("Light " + x.Id + " state is now: " + x.State.On);
-
             }
+            LightRefresh();
         }
 
-        /// <summary> (DEBUG)
+        /// <summary>
         /// Used to display some information within the HueLibrary (Bridge and Light info).
         /// </summary>
         private void GetLights(object sender, RoutedEventArgs e)
@@ -128,19 +122,20 @@ namespace UWP_Hue
                 Debug.WriteLine("Light ID: " + x.Id);               //Shows the ID of a bulb from bridge.
                 Debug.WriteLine("Model Num: " + x.ModelId);         //Shows the Model Number of a bulb.
                 Debug.WriteLine("State on/off: " + x.State.On);     //Shows the On/Off state of a bulb.
-                Debug.WriteLine("Bulb " + x.Id + " name is: " +x.Name);     //Shows the bulb's name.
+                Debug.WriteLine("Bulb " + x.Id + " name is: " + x.Name);     //Shows the bulb's name.
                 Debug.WriteLine("Bulb Type: " + x.Type);            //Shows the type of bulb it is.
                 Debug.WriteLine("Effect: " + x.State.Effect);       //Effect state.
                 Debug.WriteLine("Bri: " + x.State.Brightness);      //Briness output.
                 Debug.WriteLine("Hue: " + x.State.Hue);             //Hue output.
-                Debug.WriteLine("Sat: " + x.State.Saturation);      //Saturation outout.
+                Debug.WriteLine("Sat: " + x.State.Saturation);      //Saturation outout
                 Debug.WriteLine("----------");
-
             }
+
+            Debug.Write(_bridge.modelid);
+
         }
 
-        //TODO: Is there a way to combine these to one function?
-        private void Lights_Brightness10(object sender, RoutedEventArgs e)
+        public void Lights_Brightness10(object sender, RoutedEventArgs e)
         {
             foreach (var x in Lights)
             {
@@ -150,7 +145,7 @@ namespace UWP_Hue
             LightRefresh();
         }
 
-        private void Lights_Brightness30(object sender, RoutedEventArgs e)
+        public void Lights_Brightness30(object sender, RoutedEventArgs e)
         {
             foreach (var x in Lights)
             {
@@ -160,7 +155,7 @@ namespace UWP_Hue
             LightRefresh();
         }
 
-        private void Lights_Brightness50(object sender, RoutedEventArgs e)
+        public void Lights_Brightness50(object sender, RoutedEventArgs e)
         {
             foreach (var x in Lights)
             {
@@ -170,7 +165,7 @@ namespace UWP_Hue
             LightRefresh();
         }
 
-        private void Lights_Brightness100(object sender, RoutedEventArgs e)
+        public void Lights_Brightness100(object sender, RoutedEventArgs e)
         {
             foreach (var x in Lights)
             {
@@ -181,7 +176,7 @@ namespace UWP_Hue
         }
 
         //I like deep purple with Gen 3 bulbs.
-        private void I_Love_Purple(object sender, RoutedEventArgs e)
+        public void I_Love_Purple(object sender, RoutedEventArgs e)
         {
             foreach (var PURPLE in Lights)
             {
@@ -199,7 +194,6 @@ namespace UWP_Hue
         {
             Lights = new ObservableCollection<Light>(await _bridge.GetLightsAsync());
         }
-
 
     }
 

@@ -27,16 +27,17 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 using Rssdp;
+using System.Runtime.Serialization;
 
 namespace HueLibrary
 {
     /// <summary>
     /// Represents a Hue bridge.
     /// </summary>
+    [DataContract]
     public class Bridge
     {
         /// <summary>
@@ -53,6 +54,12 @@ namespace HueLibrary
         }
 
         /// <summary>
+        ///Constructor to get the Bridge's model ID.
+        /// </summary>
+        [DataMember(Name = "modelid")]
+        public string modelid { get; set; }
+
+        /// <summary>
         /// Constructor for the bridge with IP and username provided. 
         /// </summary>
         public Bridge(string ip, string userId) : this(ip)
@@ -60,14 +67,12 @@ namespace HueLibrary
             UserId = userId;
         }
 
-
         /// <summary>
-        /// Attempts to find a bridge using UPnP, per Discovery Guidelines at
+        /// Second attempt to find a bridge using UPnP, per Discovery Guidelines at
         /// http://www.developers.meethue.com/documentation/hue-bridge-discovery
         /// </summary>
         public static async Task<Bridge> FindUPnP()
         {
-
             try
             {
                 string ip = "";
@@ -78,7 +83,6 @@ namespace HueLibrary
 
                     foreach (var foundDevice in foundDevices)
                     {
-
                         var url = foundDevice.DescriptionLocation.ToString();
 
                         if (url.Contains("/description.xml"))
@@ -95,13 +99,13 @@ namespace HueLibrary
             }
             catch
             {
+                //Returns null if nothing found.
                 return null;
             }
         }
 
         /// <summary>
-        /// Second attempt to find a bridge using N-UPnP, per Discovery Guidelines at
-        /// http://www.developers.meethue.com/documentation/hue-bridge-discovery
+        /// First attempt to find a bridge using N-UPnP
         /// </summary>
         public static async Task<Bridge> FindAsync()
         {
@@ -186,6 +190,30 @@ namespace HueLibrary
         public async Task FindNewLightsAsync() => await HttpPutAsync("lights", String.Empty);
 
         /// <summary>
+        /// Finds The Bridge model ID
+        /// </summary>
+        //Total noob at JSON ;D
+        public async Task FindBridgeModelName()
+        { 
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    string response = await client.GetStringAsync(new Uri($"http://{UrlBase}"));
+
+                    JObject joResponse = JObject.Parse(response);
+                    JObject ojObject = (JObject)joResponse["config"];
+                    string model = (string)ojObject.SelectToken("modelid");
+                    modelid = model;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+            }
+        }
+
+        /// <summary>
         /// Registers the application with the bridge and returns if the authorization succeeded.
         /// </summary>
         public async Task<bool> RegisterAsync()
@@ -194,9 +222,10 @@ namespace HueLibrary
             {
                 using (var client = new HttpClient())
                 {
-                    string id = new Random().Next().ToString();
+                    //Registers Computer's Domain name to be added to whitelist.
+                    string id = System.Net.Dns.GetHostName();
                     var response = await client.PostAsync(new Uri($"http://{Ip}/api"),
-                        new HttpStringContent($"{{\"devicetype\":\"HueLightController#{id}\"}}"));
+                        new HttpStringContent($"{{\"devicetype\":\"UWP-Hue:{id}\"}}"));
                     string content = await response.Content.ReadAsStringAsync();
                     JArray json = JArray.Parse(content);
                     if (null != json.First["success"])

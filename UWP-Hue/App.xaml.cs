@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.StartScreen;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -31,7 +33,6 @@ namespace UWP_Hue
         {
             if (e.PreviousExecutionState != ApplicationExecutionState.Running)
             {
-                bool loadState = (e.PreviousExecutionState == ApplicationExecutionState.Terminated);
                 oobe welcomeWindow = new oobe(e.SplashScreen);
                 Window.Current.Content = welcomeWindow;
             }
@@ -59,7 +60,6 @@ namespace UWP_Hue
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
     }

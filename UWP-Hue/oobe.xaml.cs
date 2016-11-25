@@ -41,8 +41,6 @@ namespace UWP_Hue
             var localStorage = ApplicationData.Current.LocalSettings.Values;
             if (localStorage.ContainsKey("bridgeIp") && localStorage.ContainsKey("userId"))
             {
-                Debug.WriteLine("Bridge Already Saved!");
-
                 Setup setup = new Setup(); //Setup Temporaty class to find HUE bridge/lights...
                 setup.Payload();
 
@@ -74,8 +72,6 @@ namespace UWP_Hue
             }
         }
 
-
-        //TODO: I broke this ¯\_(ツ)_/¯ Won't Navigate to....
         private void SetupButton_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Setup Clicked");
@@ -83,7 +79,6 @@ namespace UWP_Hue
             Setup setupWindow = new Setup(); 
             Window.Current.Content = setupWindow;
         }
-
     }
 
     /// <summary>
